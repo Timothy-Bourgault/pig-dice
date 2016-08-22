@@ -2,13 +2,13 @@ $(document).ready(function(){
 
   var placeList = [];
   var state = null;
-  // Business Logic Section
+
   function addPlace(city, country, date, activities, notes) {
     this.City = city;
     this.Country = country;
     this.Date = date;
     this.Activities = activities;
-    this.Notes = notes;
+    this.Notes = [notes];
   };
 
   function updateNewPlace(city, country, date, activities, notes) {
@@ -21,6 +21,7 @@ $(document).ready(function(){
       $("#showDate").text(newPlace.Date);
       $("#showActivities").text(newPlace.Activities);
       $("#showNotes").text(newPlace.Notes);
+      printNotes(city);
       state = newPlace.City;
 
     });
@@ -29,11 +30,37 @@ $(document).ready(function(){
   function addNote(cityName, newNote){
     for(i=0; i<placeList.length; ++i){
       if (placeList[i].City === cityName) {
-        placeList[i].Notes = placeList[i].Notes + newNote;
-        $("#showNotes").text(placeList[i].Notes);
+        placeList[i].Notes.push(newNote);
+
+          printNotes(cityName);
+
+
       }
     }
   };
+
+  function printNotes(cityName){
+    for(i=0; i<placeList.length; ++i){
+      if (placeList[i].City === cityName) {
+        $("#showNotes").text("");
+        for(j=0; j < placeList[i].Notes.length; ++j){
+          $("#showNotes").append("<p class=\"citynote\">" + placeList[i].Notes[j] + "</p>");
+
+          $( ".citynote" ).click(function() {
+            var newJ = j;
+            $(this).remove();
+            console.log("deleted " + i + " " + placeList[0].Notes[0]);
+            //console.log("deleted" + placeList[0].Notes[0]);
+            //placeList[i].Notes.splice(j,1);
+
+          });
+        }
+      }
+    }
+  };
+
+
+
 
   updateNewPlace("Paris", "France", "July", "Eating and Drinking", "I like smelly cheese");
   updateNewPlace("Berlin", "Germany", "June", "Eating and Drinking", "I like smelly schnitzel");
