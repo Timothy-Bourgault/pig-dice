@@ -1,0 +1,107 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <title>Travel Log Application</title>
+    <link href="css/bootstrap.min.css" rel="stylesheet" type="text/css">
+    <link href="css/styles.css" rel="stylesheet" type="text/css">
+    <script src="js/jquery-3.1.0.js"></script>
+    <script src="js/bootstrap.min.js"></script>
+    <script src="js/scripts.js"></script>
+  </head>
+  <body>
+    <nav class="navbar navbar-default navbar-fixed-top">
+      <div class="container">
+        <div class="navbar-header">
+          <a class="navbar-brand" href="#">Travel Log </a>
+        </div>
+        <div id="navbar" class="navbar-collapse navbar-right">
+          <ul class="nav navbar-nav">
+            <!--li id="rules_button"><a href="#">Rules</a></li-->
+          </ul>
+        </div>
+      </div>
+    </nav>
+    <div class="container">
+
+      <div class="jumbotron" id="form_input">
+        <form class="form-horizontal" id="add_place">
+            <div class="form-group">
+              <div class="col-md-offset-4 col-sm-4">
+                <label class="control-label" for="textinput">Country </label>
+              </div>
+              <div class="col-md-offset-4 col-sm-4">
+                <input id="country" type="text" placeholder="" class="form-control input-md">
+              </div>
+              <div class="col-md-offset-4 col-sm-4">
+                <label class="control-label" for="textinput">City </label>
+              </div>
+              <div class="col-md-offset-4 col-sm-4">
+                <input id="city" type="text" placeholder="" class="form-control input-md">
+              </div>
+              <div class="col-md-offset-4 col-sm-4">
+                <label class="control-label" for="textinput">Date </label>
+              </div>
+              <div class="col-md-offset-4 col-sm-4">
+                <input id="date" type="text" placeholder="" class="form-control input-md">
+              </div>
+              <div class="col-md-offset-4 col-sm-4">
+                <label class="control-label" for="textinput">Activities </label>
+              </div>
+              <div class="col-md-offset-4 col-sm-4">
+                <input id="activities" type="text" placeholder="" class="form-control input-md">
+              </div>
+              <div class="col-md-offset-4 col-sm-4">
+                <label class="control-label" for="textinput">Notes </label>
+              </div>
+              <div class="col-md-offset-4 col-sm-4">
+                <input id="notes" type="text" placeholder="" class="form-control input-md">
+              </div>
+            </div>
+            <div class="form-group">
+              <div class="col-md-offset-4 col-sm-4 ">
+                <p>
+                  <button type="submit" class="submit_button btn btn-primary btn-md" id="submit_button">Submit</button>
+                  <button type="reset" class="submit_button btn btn-primary btn-md" id="reset_button">Reset</button>
+                </p>
+              </div>
+            </div>
+        </form>
+      </div>
+      <div class="jumbotron" id="display_places">
+
+      </div>
+      <div class="jumbotron" id="display_details">
+        <p>City: <span id="showCity"></span></p>
+        <p>Country: <span id="showCountry"></span></p>
+        <p>Date: <span id="showDate"></span></p>
+        <p>Activities: <span id="showActivities"></span></p>
+        <p>Notes: <span id="showNotes"></span></p>
+
+        <form id="add_note">
+                <input id="newNote" type="text">
+                <button type="submit" id="submit_button">Add Note</button>
+          </form>
+      </div>
+    </div>
+
+    <!-- <button id="launch_modal" type="submit" class="btn btn-primary" data-toggle="modal" data-target="#answer_modal">SUBMIT SURVEY</button> -->
+
+    <!-- <div class="modal fade" id="answer_modal" tabindex="-1" role="dialog" aria-labelledby="myModalLabel">
+      <div class="modal-dialog" role="document">
+        <div class="modal-content">
+          <div class="modal-header">
+            <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+            <h4 class="modal-title">Information about this place:</h4>
+          </div>
+          <div class="modal-body">
+            <p id="infoPlace"></p>
+          </div>
+        </div>
+      </div>
+    </div> -->
+
+  </body>
+</html>

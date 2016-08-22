@@ -1,0 +1,42 @@
+body {
+  background-color: #286DA8;
+  padding-top: 70px;
+}
+
+#form_response, #app_rules {
+  display: none;
+}
+
+.form_output {
+  text-align: center;
+}
+
+#form_fields {
+  line-height: 30px;
+  margin:auto;
+  font-size:16px;
+  padding:5px;
+  text-align:center;
+  background:#808080;
+  color:#ffffff;
+  border:solid 1px #666;
+  border-radius:5px;
+}
+
+#form_fields, #app_rules {
+  margin-top: 15px;
+}
+
+#show_form {
+  cursor:pointer;
+}
+
+#display_places p {
+  text-align: left;
+  padding-left: 375px;
+}
+
+#display_places h2 {
+  text-align: center;
+  padding-bottom: 30px;
+}
