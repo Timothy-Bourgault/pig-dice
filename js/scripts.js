@@ -1,99 +1,136 @@
 $(document).ready(function(){
 
-  var placeList = [];
-  var state = null;
 
-  function addPlace(city, country, date, activities, notes) {
-    this.City = city;
-    this.Country = country;
-    this.Date = date;
-    this.Activities = activities;
-    this.Notes = [notes];
+// Business Logic
+  var gameState = {
+    currentTotal: 0,
+    die1: null,
+    die2: null,
+    player1Turn: true,
+    player2Comp: true
   };
 
-  function updateNewPlace(city, country, date, activities, notes) {
-    var newPlace = new addPlace(city, country, date, activities, notes);
-    placeList.push(newPlace);
-    $("#display_places").append("<p class=\"places\">" + newPlace.City + "</p>");
-    $(".places").last().click(function()  {
-      $("#showCity").text(newPlace.City);
-      $("#showCountry").text(newPlace.Country);
-      $("#showDate").text(newPlace.Date);
-      $("#showActivities").text(newPlace.Activities);
-      $("#showNotes").text(newPlace.Notes);
-      printNotes(city);
-      state = newPlace.City;
-
-    });
+  function rollDie(){
+    return(Math.floor(Math.random() * 6) + 1)
   };
 
-  function addNote(cityName, newNote){
-    for(i=0; i<placeList.length; ++i){
-      if (placeList[i].City === cityName) {
-        placeList[i].Notes.push(newNote);
+  function rollDice(){
+    var roll = [];
+    roll[0] = rollDie();
+    roll[1] = rollDie();
 
-          printNotes(cityName);
-
-
-      }
+    if(roll[0] === 1 || roll[1] === 1){
+      gameState.currentTotal = 0;
+      updateTotal(gameState.currentTotal);
+      toggleTurn();
     }
+    else {
+      gameState.currentTotal = gameState.currentTotal + roll[0] + roll[1];
+      updateTotal(gameState.currentTotal);
+    }
+    return(roll);
   };
 
-  function printNotes(cityName){
-    for(i=0; i<placeList.length; ++i){
-      if (placeList[i].City === cityName) {
-        $("#showNotes").text("");
-        for(j=0; j < placeList[i].Notes.length; ++j){
-          $("#showNotes").append("<p class=\"citynote\">" + placeList[i].Notes[j] + "</p>");
+  function Player(name) {
+    this.name = name;
+    this.score = 0;
+    this.wins = 0;
+  }
 
-          $( ".citynote" ).click(function() {
-            var newJ = j;
-            $(this).remove();
-            console.log("deleted " + i + " " + placeList[0].Notes[0]);
-            //console.log("deleted" + placeList[0].Notes[0]);
-            //placeList[i].Notes.splice(j,1);
+  function reset(){
+    player1.score = 0;
+    player2.score = 0;
+    gameState.player1Turn = true;
+    gameState.currentTotal = 0;
 
-          });
+  }
+
+  function computerTurn(){
+    document.getElementById("rollButton").click();
+  };
+
+
+  var player1 = new Player("Player 1");
+  var player2 = new Player("Player 1");
+
+
+
+  // User Interface
+
+  function toggleTurn(){
+    if (gameState.player1Turn) {
+      gameState.player1Turn = false;
+      $("#p1flag").css({"color": "red"});
+      $("#p2flag").css({"color": "green"});
+    }
+    else {
+      gameState.player1Turn = true;
+      $("#p1flag").css({"color": "green"});
+      $("#p2flag").css({"color": "red"});
+      }
+  };
+
+  function updateTotal(newTotal){
+      $("#totalOutput").text(newTotal);
+  };
+
+  $("#resetButton").click(function(event){
+    reset();
+    $("#p1flag").css({"color": "green"});
+    $("#p2flag").css({"color": "red"});
+    $("#p1ScoreOutput").text(player1.score);
+    $("#p2ScoreOutput").text(player2.score);
+    $("#d1Output").text("-");
+    $("#d2Output").text("-");
+    $("#totalOutput").text(0);
+    $("#rollButton").css({"display": "inline"});
+    $("#holdButton").css({"display": "inline"});
+    $("#p1Wins").css({"display": "none"});
+    $("#p2Wins").css({"display": "none"});
+  });
+
+  $("#rollButton").click(function(event){
+    var temp = rollDice();
+    $("#d1Output").text(temp[0]);
+    $("#d2Output").text(temp[1]);
+    event.preventDefault();
+  });
+
+  $("#holdButton").click(function(event){
+    if(gameState.player1Turn) {
+      player1.score = player1.score + gameState.currentTotal;
+      $("#p1ScoreOutput").text(player1.score);
+      if(player1.score>=20) {
+        $("#p1flag").css({"color": "blue"});
+        $("#p1Wins").css({"display": "inline"});
+        $("#rollButton").css({"display": "none"});
+        $("#holdButton").css({"display": "none"});
+      }
+      else {
+        gameState.currentTotal = 0;
+        $("#totalOutput").text(gameState.currentTotal);
+        toggleTurn();
+        if(gameState.player2Comp === true) {
+          computerTurn();
+          console.log("test");
         }
       }
     }
-  };
+    else  {
+      player2.score = player2.score + gameState.currentTotal;
+      $("#p2ScoreOutput").text(player2.score);
+      if(player2.score>=20) {
+        $("#p2flag").css({"color": "blue"});
+        $("#p2Wins").css({"display": "inline"});
+        $("#rollButton").css({"display": "none"});
+        $("#holdButton").css({"display": "none"});
+      }
+      else {
+        gameState.currentTotal = 0;
+        $("#totalOutput").text(gameState.currentTotal);
+        toggleTurn();
+      }
+    }
 
-
-
-
-  updateNewPlace("Paris", "France", "July", "Eating and Drinking", "I like smelly cheese");
-  updateNewPlace("Berlin", "Germany", "June", "Eating and Drinking", "I like smelly schnitzel");
-  updateNewPlace("New York", "USA", "August", "Eating and Drinking", "I like smelly pizza");
-  updateNewPlace("London", "England", "September", "Eating and Drinking", "I like smelly fish and chips");
-  updateNewPlace("Portland", "USA", "June", "Eating and Drinking", "I like smelly beer");
-
-
-
-
-  $("#add_place").submit(function(event){
-    var country = $("input#country").val();
-    var city = $("input#city").val();
-    var date = $("input#date").val();
-    var activities = $("input#activities").val();
-    var notes = $("input#notes").val();
-
-    updateNewPlace(city, country, date, activities, notes);
-
-    event.preventDefault();
-  });
-
-
-
-  $("#add_note").submit(function(event){
-    var newNote = $("input#newNote").val();
-    //var city = placeList[state].City;
-    addNote(state, newNote);
-
-
-    console.log(state);
-
-
-    event.preventDefault();
-  });
+    });
 });

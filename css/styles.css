@@ -3,40 +3,43 @@ body {
   padding-top: 70px;
 }
 
-#form_response, #app_rules {
+.center {
+  text-align: center;
+}
+
+.left {
+  text-align: center;
+}
+
+.left h2{
+  font-family: 'Righteous', cursive;
+}
+
+.right {
+  text-align: center;
+}
+
+.right h2{
+  font-family: 'Righteous', cursive;
+}
+
+#p1flag {
+  color:green;
+}
+
+#p2flag {
+  color:red;
+}
+
+h1 {
+  font-family: 'Baloo Da', cursive;
+  font-size: 23em;
+}
+
+#p1Wins {
   display: none;
 }
 
-.form_output {
-  text-align: center;
-}
-
-#form_fields {
-  line-height: 30px;
-  margin:auto;
-  font-size:16px;
-  padding:5px;
-  text-align:center;
-  background:#808080;
-  color:#ffffff;
-  border:solid 1px #666;
-  border-radius:5px;
-}
-
-#form_fields, #app_rules {
-  margin-top: 15px;
-}
-
-#show_form {
-  cursor:pointer;
-}
-
-#display_places p {
-  text-align: left;
-  padding-left: 375px;
-}
-
-#display_places h2 {
-  text-align: center;
-  padding-bottom: 30px;
+#p2Wins {
+  display: none;
 }

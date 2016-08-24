@@ -4,9 +4,10 @@
     <meta charset="utf-8">
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <meta name="viewport" content="width=device-width, initial-scale=1">
-    <title>Travel Log Application</title>
+    <title>Pig Dice Application</title>
     <link href="css/bootstrap.min.css" rel="stylesheet" type="text/css">
     <link href="css/styles.css" rel="stylesheet" type="text/css">
+    <link href="https://fonts.googleapis.com/css?family=Baloo+Chettan|Baloo+Da|Ravi+Prakash|Righteous" rel="stylesheet">
     <script src="js/jquery-3.1.0.js"></script>
     <script src="js/bootstrap.min.js"></script>
     <script src="js/scripts.js"></script>
@@ -15,11 +16,10 @@
     <nav class="navbar navbar-default navbar-fixed-top">
       <div class="container">
         <div class="navbar-header">
-          <a class="navbar-brand" href="#">Travel Log </a>
+          <a class="navbar-brand" href="#">Pig Dice</a>
         </div>
         <div id="navbar" class="navbar-collapse navbar-right">
           <ul class="nav navbar-nav">
-            <!--li id="rules_button"><a href="#">Rules</a></li-->
           </ul>
         </div>
       </div>
@@ -27,81 +27,39 @@
     <div class="container">
 
       <div class="jumbotron" id="form_input">
-        <form class="form-horizontal" id="add_place">
-            <div class="form-group">
-              <div class="col-md-offset-4 col-sm-4">
-                <label class="control-label" for="textinput">Country </label>
-              </div>
-              <div class="col-md-offset-4 col-sm-4">
-                <input id="country" type="text" placeholder="" class="form-control input-md">
-              </div>
-              <div class="col-md-offset-4 col-sm-4">
-                <label class="control-label" for="textinput">City </label>
-              </div>
-              <div class="col-md-offset-4 col-sm-4">
-                <input id="city" type="text" placeholder="" class="form-control input-md">
-              </div>
-              <div class="col-md-offset-4 col-sm-4">
-                <label class="control-label" for="textinput">Date </label>
-              </div>
-              <div class="col-md-offset-4 col-sm-4">
-                <input id="date" type="text" placeholder="" class="form-control input-md">
-              </div>
-              <div class="col-md-offset-4 col-sm-4">
-                <label class="control-label" for="textinput">Activities </label>
-              </div>
-              <div class="col-md-offset-4 col-sm-4">
-                <input id="activities" type="text" placeholder="" class="form-control input-md">
-              </div>
-              <div class="col-md-offset-4 col-sm-4">
-                <label class="control-label" for="textinput">Notes </label>
-              </div>
-              <div class="col-md-offset-4 col-sm-4">
-                <input id="notes" type="text" placeholder="" class="form-control input-md">
-              </div>
+        <div class="row">
+          <div class="col-xs-3 left">
+            <h2 id="p1flag">Player 1</h2>
+            <div id="p1ScoreOutput">0</div>
+            <div id="p1Wins">
+              <img class="img-responsive" src="img/bmo.gif" alt="bmo the robot dancing" />
+              <h1>You Win!!!</h1>
             </div>
-            <div class="form-group">
-              <div class="col-md-offset-4 col-sm-4 ">
-                <p>
-                  <button type="submit" class="submit_button btn btn-primary btn-md" id="submit_button">Submit</button>
-                  <button type="reset" class="submit_button btn btn-primary btn-md" id="reset_button">Reset</button>
-                </p>
-              </div>
+          </div>
+          <div class="col-xs-6 center">
+            <h1>Pig Dice</h1>
+            <div id="totalOutput">0</div>
+            <button id="rollButton" type="button" class="btn btn-info">Roll</button>
+            <button id="holdButton"  type="button" class="btn btn-success">Hold</button>
+              <p><span id="d1Output">-</span>
+              <span id="d2Output">-</span></p>
+            <button id="resetButton"  type="button" class="btn btn-danger">Reset Game</button>
+          </div>
+          <div class="col-xs-3 right">
+            <h2 id="p2flag">Player 2</h2>
+            <div id="p2ScoreOutput">0</div>
+            <div id="p2Wins">
+              <img class="img-responsive" src="img/iceWiz.gif" alt="The Ice Wizard twerking" />
+              <h1>You Win!!!</h1>
             </div>
-        </form>
-      </div>
-      <div class="jumbotron" id="display_places">
-
-      </div>
-      <div class="jumbotron" id="display_details">
-        <p>City: <span id="showCity"></span></p>
-        <p>Country: <span id="showCountry"></span></p>
-        <p>Date: <span id="showDate"></span></p>
-        <p>Activities: <span id="showActivities"></span></p>
-        <p>Notes: <span id="showNotes"></span></p>
-
-        <form id="add_note">
-                <input id="newNote" type="text">
-                <button type="submit" id="submit_button">Add Note</button>
-          </form>
-      </div>
-    </div>
-
-    <!-- <button id="launch_modal" type="submit" class="btn btn-primary" data-toggle="modal" data-target="#answer_modal">SUBMIT SURVEY</button> -->
-
-    <!-- <div class="modal fade" id="answer_modal" tabindex="-1" role="dialog" aria-labelledby="myModalLabel">
-      <div class="modal-dialog" role="document">
-        <div class="modal-content">
-          <div class="modal-header">
-            <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
-            <h4 class="modal-title">Information about this place:</h4>
           </div>
-          <div class="modal-body">
-            <p id="infoPlace"></p>
-          </div>
+
         </div>
+
       </div>
-    </div> -->
+
+
+
 
   </body>
 </html>
