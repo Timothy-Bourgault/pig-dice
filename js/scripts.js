@@ -1,14 +1,24 @@
 $(document).ready(function(){
 
-
 // Business Logic
   var gameState = {
     currentTotal: 0,
-    die1: null,
-    die2: null,
-    player1Turn: true,
-    player2Comp: true
+    player2Comp: true,
+    playerTurn: "player1"
   };
+
+  function Player(name) {
+    this.name = name;
+    this.score = 0;
+    this.wins = 0;
+  }
+
+  function resetData(){
+    player1.score = 0;
+    player2.score = 0;
+    gameState.playerTurn = "player1";
+    gameState.currentTotal = 0;
+  }
 
   function rollDie(){
     return(Math.floor(Math.random() * 6) + 1)
@@ -19,10 +29,16 @@ $(document).ready(function(){
     roll[0] = rollDie();
     roll[1] = rollDie();
 
+    //console.log(roll[0] + " : " + roll[1] + " : " + gameState.playerTurn);
+
     if(roll[0] === 1 || roll[1] === 1){
       gameState.currentTotal = 0;
       updateTotal(gameState.currentTotal);
       toggleTurn();
+      if (gameState.playerTurn === "player2" && gameState.player2Comp) {
+        computerTurn();
+      }
+
     }
     else {
       gameState.currentTotal = gameState.currentTotal + roll[0] + roll[1];
@@ -31,40 +47,57 @@ $(document).ready(function(){
     return(roll);
   };
 
-  function Player(name) {
-    this.name = name;
-    this.score = 0;
-    this.wins = 0;
-  }
 
-  function reset(){
-    player1.score = 0;
-    player2.score = 0;
-    gameState.player1Turn = true;
-    gameState.currentTotal = 0;
+  function computerRoll(){
 
-  }
+     if(gameState.currentTotal <= 15 && gameState.playerTurn === "player2") {
+          var rollResult = rollDice();
+          printDice(rollResult[0], rollResult[1]);
+          if(rollResult[0] === 1 || rollResult[1] === 1){
+            return false;
+          }
+          else {
+            return true;
+          }
+     }
+     else {
+        hold();
+        return false;
+     }
+   };
 
-  function computerTurn(){
-    document.getElementById("rollButton").click();
+  function printDice(val1, val2) {
+    $("#d1Output").text(val1);
+    $("#d2Output").text(val2);
+    //console.log("rollResult " + val1 + " : " + val2);
   };
 
-
-  var player1 = new Player("Player 1");
-  var player2 = new Player("Player 1");
-
-
+  //Initialize Players and board
+  var player1 = new Player("player1");
+  var player2 = new Player("player2");
+  resetBoard();
 
   // User Interface
+  function computerTurn(){
+    $("#holdButton").prop('disabled', true);
+    $("#rollButton").prop('disabled', true);
+
+    while(computerRoll());
+
+
+    $("#rollButton").prop('disabled', false);
+  };
 
   function toggleTurn(){
-    if (gameState.player1Turn) {
-      gameState.player1Turn = false;
+    $("#holdButton").prop('disabled', true);
+
+    if (gameState.playerTurn === "player1") {
+      gameState.playerTurn = "player2";
       $("#p1flag").css({"color": "red"});
       $("#p2flag").css({"color": "green"});
     }
-    else {
-      gameState.player1Turn = true;
+    else if(gameState.playerTurn === "player2") {
+      gameState.playerTurn = "player1";
       $("#p1flag").css({"color": "green"});
       $("#p2flag").css({"color": "red"});
       }
@@ -74,8 +107,7 @@ $(document).ready(function(){
       $("#totalOutput").text(newTotal);
   };
 
-  $("#resetButton").click(function(event){
-    reset();
+  function resetBoard(){
     $("#p1flag").css({"color": "green"});
     $("#p2flag").css({"color": "red"});
     $("#p1ScoreOutput").text(player1.score);
@@ -83,24 +115,30 @@ $(document).ready(function(){
     $("#d1Output").text("-");
     $("#d2Output").text("-");
     $("#totalOutput").text(0);
-    $("#rollButton").css({"display": "inline"});
-    $("#holdButton").css({"display": "inline"});
     $("#p1Wins").css({"display": "none"});
     $("#p2Wins").css({"display": "none"});
+    $("#holdButton").prop('disabled', true);
+    $("#rollButton").prop('disabled', false);
+  };
+
+  $("#resetButton").click(function(event){
+    resetData();
+    resetBoard();
   });
 
   $("#rollButton").click(function(event){
+    $("#holdButton").prop('disabled', false);
     var temp = rollDice();
-    $("#d1Output").text(temp[0]);
-    $("#d2Output").text(temp[1]);
+    printDice(temp[0], temp[1]);
     event.preventDefault();
   });
 
-  $("#holdButton").click(function(event){
-    if(gameState.player1Turn) {
+  function hold(){
+
+    if(gameState.playerTurn === "player1") {
       player1.score = player1.score + gameState.currentTotal;
       $("#p1ScoreOutput").text(player1.score);
-      if(player1.score>=20) {
+      if(player1.score>=50) {
         $("#p1flag").css({"color": "blue"});
         $("#p1Wins").css({"display": "inline"});
         $("#rollButton").css({"display": "none"});
@@ -112,14 +150,14 @@ $(document).ready(function(){
         toggleTurn();
         if(gameState.player2Comp === true) {
           computerTurn();
-          console.log("test");
         }
       }
     }
+    // Player2
     else  {
       player2.score = player2.score + gameState.currentTotal;
       $("#p2ScoreOutput").text(player2.score);
-      if(player2.score>=20) {
+      if(player2.score>=50) {
         $("#p2flag").css({"color": "blue"});
         $("#p2Wins").css({"display": "inline"});
         $("#rollButton").css({"display": "none"});
@@ -128,9 +166,14 @@ $(document).ready(function(){
       else {
         gameState.currentTotal = 0;
         $("#totalOutput").text(gameState.currentTotal);
+        $("#rollButton").prop('disabled', false);
         toggleTurn();
       }
     }
+  };
 
-    });
+  $("#holdButton").click(function(event){
+    hold();
+  });
+
 });

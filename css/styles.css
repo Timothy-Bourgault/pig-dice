@@ -3,6 +3,16 @@ body {
   padding-top: 70px;
 }
 
+#title h1 {
+  text-align: center;
+  font-family: 'Ewert', cursive;
+  color: red;
+
+}
+#title {
+  display: none;
+}
+
 .center {
   text-align: center;
 }
