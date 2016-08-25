@@ -144,8 +144,8 @@ $(document).ready(function(){
 
   // UI
   var die = new Die(game.numSides);
-  addPlayer(game, "Rick");
-  addPlayer(game, "Steve");
+  addPlayer(game, "BMO");
+  addPlayer(game, "Ice King");
   addPlayer(game, "Dave");
   game.players[1].isHuman = true;
   game.players[1].robotAiHard = true;
