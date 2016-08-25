@@ -1,179 +1,217 @@
 $(document).ready(function(){
 
-// Business Logic
-  var gameState = {
-    currentTotal: 0,
-    player2Comp: true,
-    playerTurn: "player1"
-  };
+  function GameState() {
+    this.winningScore = 100;
+    this.maxRobotRolls = 2;
+    this.maxRobotPoints = 15;
+    this.currentTotal = 0;
+    this.currentPlayer = 0;
+    this.numDie = 1;
+    this.players = [];
+    //this.compPlayers =[];
+  }
+
+  GameState.prototype.resetData = function() {
+    for(var i=0; i<this.players.length; ++i){
+      this.players[i].score = 0;
+    }
+    this.currentPlayer = 0;
+    this.currentTotal = 0;
+  }
+
+  function Die(numSides) {
+    this.numSides = numSides;
+    this.currentValue = 1;
+  }
+
+  Die.prototype.roll = function() {
+    this.currentValue = Math.floor(Math.random() * this.numSides) + 1;
+    return(this.currentValue);
+  }
 
   function Player(name) {
     this.name = name;
     this.score = 0;
+    this.lastRoll =[];
     this.wins = 0;
+    this.isHuman = true;
+    this.flag = "#" + name + "Flag";
+    this.scoreOutput = "#" + name + "Score";
   }
 
-  function resetData(){
-    player1.score = 0;
-    player2.score = 0;
-    gameState.playerTurn = "player1";
-    gameState.currentTotal = 0;
-  }
-
-  function rollDie(){
-    return(Math.floor(Math.random() * 6) + 1)
-  };
-
-  function rollDice(){
+  Player.prototype.rollDice = function() {
     var roll = [];
-    roll[0] = rollDie();
-    roll[1] = rollDie();
+    for(var i=0; i<game.numDie; ++i){
+      roll.push(die.roll());
+    }
+    $("#d1Output").text(roll);
+    game.players[game.currentPlayer].lastRoll = roll;
 
-    //console.log(roll[0] + " : " + roll[1] + " : " + gameState.playerTurn);
-
-    if(roll[0] === 1 || roll[1] === 1){
-      gameState.currentTotal = 0;
-      updateTotal(gameState.currentTotal);
-      toggleTurn();
-      if (gameState.playerTurn === "player2" && gameState.player2Comp) {
-        computerTurn();
-      }
-
+    if(roll.indexOf(1) > -1){   // Player rolled a One
+      game.currentTotal = 0;
+      updateTotal(game.currentTotal);
+      return false;
     }
     else {
-      gameState.currentTotal = gameState.currentTotal + roll[0] + roll[1];
-      updateTotal(gameState.currentTotal);
-    }
-    return(roll);
-  };
-
-
-  function computerRoll(){
-
-     if(gameState.currentTotal <= 15 && gameState.playerTurn === "player2") {
-          var rollResult = rollDice();
-          printDice(rollResult[0], rollResult[1]);
-          if(rollResult[0] === 1 || rollResult[1] === 1){
-            return false;
-          }
-          else {
-            return true;
-          }
-     }
-     else {
-        hold();
-        return false;
-     }
-   };
-
-  function printDice(val1, val2) {
-    $("#d1Output").text(val1);
-    $("#d2Output").text(val2);
-    //console.log("rollResult " + val1 + " : " + val2);
-  };
-
-  //Initialize Players and board
-  var player1 = new Player("player1");
-  var player2 = new Player("player2");
-  resetBoard();
-
-  // User Interface
-  function computerTurn(){
-    $("#holdButton").prop('disabled', true);
-    $("#rollButton").prop('disabled', true);
-
-    while(computerRoll());
-
-
-    $("#rollButton").prop('disabled', false);
-  };
-
-  function toggleTurn(){
-    $("#holdButton").prop('disabled', true);
-
-    if (gameState.playerTurn === "player1") {
-      gameState.playerTurn = "player2";
-      $("#p1flag").css({"color": "red"});
-      $("#p2flag").css({"color": "green"});
-    }
-    else if(gameState.playerTurn === "player2") {
-      gameState.playerTurn = "player1";
-      $("#p1flag").css({"color": "green"});
-      $("#p2flag").css({"color": "red"});
+      var total = 0;
+      for(var i=0; i<roll.length; ++i){
+        total += roll[i];
       }
-  };
-
-  function updateTotal(newTotal){
-      $("#totalOutput").text(newTotal);
-  };
-
-  function resetBoard(){
-    $("#p1flag").css({"color": "green"});
-    $("#p2flag").css({"color": "red"});
-    $("#p1ScoreOutput").text(player1.score);
-    $("#p2ScoreOutput").text(player2.score);
-    $("#d1Output").text("-");
-    $("#d2Output").text("-");
-    $("#totalOutput").text(0);
-    $("#p1Wins").css({"display": "none"});
-    $("#p2Wins").css({"display": "none"});
-    $("#holdButton").prop('disabled', true);
-    $("#rollButton").prop('disabled', false);
-  };
-
-  $("#resetButton").click(function(event){
-    resetData();
-    resetBoard();
-  });
-
-  $("#rollButton").click(function(event){
-    $("#holdButton").prop('disabled', false);
-    var temp = rollDice();
-    printDice(temp[0], temp[1]);
-    event.preventDefault();
-  });
-
-  function hold(){
-
-    if(gameState.playerTurn === "player1") {
-      player1.score = player1.score + gameState.currentTotal;
-      $("#p1ScoreOutput").text(player1.score);
-      if(player1.score>=50) {
-        $("#p1flag").css({"color": "blue"});
-        $("#p1Wins").css({"display": "inline"});
-        $("#rollButton").css({"display": "none"});
-        $("#holdButton").css({"display": "none"});
-      }
-      else {
-        gameState.currentTotal = 0;
-        $("#totalOutput").text(gameState.currentTotal);
-        toggleTurn();
-        if(gameState.player2Comp === true) {
-          computerTurn();
-        }
-      }
+      game.currentTotal = game.currentTotal + total;
+      updateTotal(game.currentTotal);
     }
-    // Player2
-    else  {
-      player2.score = player2.score + gameState.currentTotal;
-      $("#p2ScoreOutput").text(player2.score);
-      if(player2.score>=50) {
-        $("#p2flag").css({"color": "blue"});
+    return(true);
+  }
+
+  Player.prototype.hold = function() {
+
+      //update the players score
+      game.players[game.currentPlayer].score += game.currentTotal;
+      $(game.players[game.currentPlayer].scoreOutput).text(game.players[game.currentPlayer].score);
+
+      if(game.players[game.currentPlayer].score  >= game.winningScore) {
+        $(game.players[game.currentPlayer].flag).css({"color": "blue"});
+
+        //$("#p2flag").css({"color": "blue"});
         $("#p2Wins").css({"display": "inline"});
         $("#rollButton").css({"display": "none"});
         $("#holdButton").css({"display": "none"});
       }
       else {
-        gameState.currentTotal = 0;
-        $("#totalOutput").text(gameState.currentTotal);
+        game.currentTotal = 0;
+        updateTotal(game.currentTotal);
         $("#rollButton").prop('disabled', false);
         toggleTurn();
+        if(game.players[game.currentPlayer].isHuman === false) {
+          robotTurn();
+        }
       }
+  }
+
+  function addPlayer(game, name) {
+    var newPlayer = new Player(name);
+    game.players.push(newPlayer);
+  }
+
+  function robotTurn(){
+    $("#holdButton").prop('disabled', true);
+    $("#rollButton").prop('disabled', true);
+
+    // Roll Twice
+    var i=0;
+    var temp;
+    do {
+      temp = game.players[game.currentPlayer].rollDice();
+      ++i;
+    } while(i<game.maxRobotRolls && temp)
+
+    $("#rollButton").prop('disabled', false);
+
+    // Hold if One wasn't rolled else toggleTurn
+    if(temp) {
+      game.players[game.currentPlayer].hold();
+    } else {
+      toggleTurn();
     }
+
+    //while(advRobotRoll());
+
+
   };
 
-  $("#holdButton").click(function(event){
-    hold();
+
+  function advRobotRoll(){
+
+     if(game.currentTotal <= 15 && !game.players[game.currentPlayer].isHuman) {
+
+
+      if(roll.indexOf(1) > -1)   // Player rolled a One
+         return true;
+      else
+        return false;
+     }
+     else {
+        game.players[game.currentPlayer].hold();
+        return false;
+     }
+   }
+
+  // UI
+  var game = new GameState();
+  var die = new Die(6);
+  addPlayer(game, "Rick");
+  addPlayer(game, "Steve");
+  game.players[1].isHuman = true;
+
+  game.resetData();
+  resetBoard();
+
+
+  function toggleTurn(){
+    $("#holdButton").prop('disabled', true);
+    if(++game.currentPlayer >= game.players.length)
+      game.currentPlayer = 0;
+
+    for(var i=0; i<game.players.length; ++i) {
+      if(game.currentPlayer === i)
+        $(game.players[i].flag).css({"color": "green"});
+      else
+        $(game.players[i].flag).css({"color": "red"});
+    }
+  }
+
+  $("#resetButton").click(function(event){
+    game.resetData();
+    resetBoard();
   });
+
+  function resetBoard(){
+    $(game.players[0].flag).css({"color": "green"});
+    $(game.players[1].flag).css({"color": "red"});
+    $("#RickScore").text(0);
+    $("#SteveScore").text(0);
+    $("#d1Output").text("-");
+    $("#totalOutput").text(0);
+    $("#p1Wins").css({"display": "none"});
+    $("#p2Wins").css({"display": "none"});
+    $("#holdButton").prop('disabled', true);
+    $("#rollButton").prop('disabled', false);
+  }
+
+  $("#rollButton").click(function(event){
+    $("#holdButton").prop('disabled', false);
+
+    // Roll Dice, returns false if a one is rolled
+    if(!game.players[game.currentPlayer].rollDice()) {
+      toggleTurn();
+
+      // Start robot turn if next player is one
+      if(!game.players[game.currentPlayer].isHuman)
+        robotTurn();
+    }
+    event.preventDefault();
+  });
+
+  $("#holdButton").click(function(event){
+    game.players[game.currentPlayer].hold();
+  });
+
+  function updateTotal(newTotal){
+      $("#totalOutput").text(newTotal);
+  }
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 
 });
