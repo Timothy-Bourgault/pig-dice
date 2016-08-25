@@ -5,12 +5,15 @@ body {
 
 #title h1 {
   text-align: center;
-  font-family: 'Ewert', cursive;
-  color: red;
+  font-family: Next Custom;
+  color: #C42210;
+  margin-top: 1em;
 
 }
+
 #title {
-  display: none;
+  background-color: #286DA8;
+
 }
 
 .center {
@@ -33,6 +36,32 @@ body {
   font-family: 'Righteous', cursive;
 }
 
+.playerCard br {
+  text-align: center;
+}
+
+.playerCard h3 {
+  font-family: Computerfont;
+  font-size: 40px;
+  text-align: center;
+
+}
+
+#player1 {
+  border-right: 8px;
+}
+
+#player2 {
+
+}
+
+#player1 {
+
+}
+
+#player1 {
+
+}
 #p1flag {
   color:green;
 }
@@ -46,10 +75,6 @@ h1 {
   font-size: 23em;
 }
 
-#p1Wins {
-  display: none;
-}
-
-#p2Wins {
+#form_input, #p1Wins, #p2Wins {
   display: none;
 }

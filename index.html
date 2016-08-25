@@ -4,7 +4,7 @@
     <meta charset="utf-8">
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <meta name="viewport" content="width=device-width, initial-scale=1">
-    <title>Pig Dice Application</title>
+    <title>Adventure Time Dice Match</title>
     <link href="css/bootstrap.min.css" rel="stylesheet" type="text/css">
     <link href="css/styles.css" rel="stylesheet" type="text/css">
     <link href="https://fonts.googleapis.com/css?family=Ewert|Baloo+Chettan|Baloo+Da|Ravi+Prakash|Righteous" rel="stylesheet">
@@ -16,52 +16,101 @@
     <nav class="navbar navbar-default navbar-fixed-top">
       <div class="container">
         <div class="navbar-header">
-          <a class="navbar-brand" href="#">Pig Dice</a>
+          <a class="navbar-brand" href="#">Adventure Time Dice Match</a>
         </div>
         <div id="navbar" class="navbar-collapse navbar-right">
           <ul class="nav navbar-nav">
+            <button id="resetButton"  type="button" class="btn btn-danger navbar-btn">Reset Game</button>
           </ul>
         </div>
       </div>
     </nav>
     <div class="container">
+
+
       <div class="jumbotron" id="title">
         <img src="img/atLogo.png" alt="Adventure Time Logo" />
-        <h1>Dice Match</h1>
+        <h1>DICE MATCH</h1>
       </div>
-      <div class="jumbotron" id="form_input">
+
+
+      <div class="jumbotron">
         <div class="row">
-          <div class="col-xs-3 left">
-            <h2 id="RickFlag">Player 1</h2>
-            <div id="RickScore">0</div>
-            <div id="p1Wins">
-              <img class="img-responsive" src="img/bmo.gif" alt="bmo the robot dancing" />
-              <h1>You Win!!!</h1>
-            </div>
+          <div class="col-xs-6 left">
+            <h2>Current Adventurer: </h2>
+            <h2 id="currentPlayer">Player1</h2>
+            <div>Game Score: <span id="currentScore">0</span></div>
+            <div>Points to Win: <span id="pointsToWin">100</span></div>
+            <p><button id="rollButton" type="button" class="btn btn-info">Roll</button>
+            <button id="holdButton"  type="button" class="btn btn-success">Hold</button></p>
           </div>
           <div class="col-xs-6 center">
-            <h1></h1>
-            <div id="totalOutput">0</div>
-            <button id="rollButton" type="button" class="btn btn-info">Roll</button>
-            <button id="holdButton"  type="button" class="btn btn-success">Hold</button>
-              <p><span id="d1Output">-</span></p>
-            <button id="resetButton"  type="button" class="btn btn-danger">Reset Game</button>
+            <h2>Turn Total: <span id="totalOutput">0</span></h2>
+            <h2>Current Roll: <span id="currentRoll">-</span></h2>
+            <h4>Previous Roll: <span id="previousRoll">-</span></h4>
           </div>
-          <div class="col-xs-3 right">
-            <h2 id="SteveFlag">Player 2</h2>
-            <div id="SteveScore">0</div>
-            <div id="p2Wins">
-              <img class="img-responsive" src="img/iceWiz.gif" alt="The Ice Wizard twerking" />
-              <h1>You Win!!!</h1>
-            </div>
-          </div>
-
         </div>
-
       </div>
 
-
-
-
+      <div class="jumbotron" id="player_board">
+        <div class="row">
+          <div class="col-xs-3 playerCard" id="p1board">
+            <h3 id="p1name">Player One</h3>
+            <br>Game Score: <span id="p1score">-</span></br>
+            <br>Total Wins:  <span id="p1wins">-</span></br>
+            <br>Last Roll:  <span id="p1lastroll">-</span></br>
+          </div>
+          <div class="col-xs-3 playerCard" id="p2board">
+            <h3 id="p2name">Player Two</h3>
+            <br>Game Score: <span id="p2score">-</span></br>
+            <br>Total Wins:  <span id="p2wins">-</span></br>
+            <br>Last Roll:  <span id="p2lastroll">-</span></br>
+          </div>
+          <div class="col-xs-3 playerCard" id="p3board">
+            <h3 id="p3name">Player Three</h3>
+            <br>Game Score: <span id="p3score">-</span></br>
+            <br>Total Wins:  <span id="p3wins">-</span></br>
+            <br>Last Roll:  <span id="p3lastroll">-</span></br>
+          </div>
+          <div class="col-xs-3 playerCard" id="p4board">
+            <h3 id="p4name">Player Four</h3>
+            <br>Game Score: <span id="p4score">-</span></br>
+            <br>Total Wins:  <span id="p4wins">-</span></br>
+            <br>Last Roll:  <span id="p4lastroll">-</span></br>
+          </div>
+        </div>
+      <div>
   </body>
 </html>
+
+
+<!-- div class="jumbotron" id="form_input">
+  <div class="row">
+    <div class="col-xs-3 left">
+      <h2 id="RickFlag">Player 1</h2>
+      <div id="RickScore">0</div>
+      <div id="p1Wins">
+        <img class="img-responsive" src="img/bmo.gif" alt="bmo the robot dancing" />
+        <h1>You Win!!!</h1>
+      </div>
+    </div>
+    <div class="col-xs-6 center">
+      <h1></h1>
+      <div id="totalOutput">0</div>
+      <button id="rollButton" type="button" class="btn btn-info">Roll</button>
+      <button id="holdButton"  type="button" class="btn btn-success">Hold</button>
+      <p><span id="d1Output">-</span></p>
+
+    </div>
+    <div class="col-xs-3 right">
+      <h2 id="SteveFlag">Player 2</h2>
+      <div id="SteveScore">0</div>
+      <div id="p2Wins">
+        <img class="img-responsive" src="img/iceWiz.gif" alt="The Ice Wizard twerking" />
+        <h1>You Win!!!</h1>
+      </div>
+    </div>
+
+  </div>
+
+</div> -->
