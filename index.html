@@ -29,12 +29,112 @@
 
 
       <div class="jumbotron" id="title">
-        <img src="img/atLogo.png" alt="Adventure Time Logo" />
-        <h1>DICE MATCH</h1>
+        <div class="row">
+          <div class="col-xs-3 colorDice">
+            <img src="img/jakeFinn.png" alt="Adventure Time Logo" />
+
+          </div>
+          <div class="col-xs-9">
+            <img class="center-block" src="img/atLogo.png" alt="dice illusion" />
+            <h1>DICE MATCH</h1>
+          </div>
+
+        </div>
+
       </div>
 
+      <div class="jumbotron" id="configure_screen">
+        <h1>Game Configuration Options</h1>
+        <form class="form-horizontal" id="config_fields">
+          <div class="row">
+            <div class="col-xs-4">
+                <label class="control-label" for="selectplayer1">Player One: </label>
+                  <select class="form-control" id="selectplayer1">
+                    <option value="Finn the Human">Finn the Human</option>
+                    <option value="Jake the Dog">Jake the Dog</option>
+                    <option value="Princess Bubblegum">Princess Bubblegum</option>
+                    <option value="Ice King">Ice King</option>
 
-      <div class="jumbotron">
+                  </select>
+                <label class="control-label" for="selectplayer2">Player Two: </label>
+                  <select class="form-control" id="selectplayer2">
+                    <option value="BMO">BMO</option>
+                    <option value="Marceline the Vampire Queen">Marceline the Vampire Queen</option>
+                    <option value="Lumpy Space Princess">Lumpy Space Princess</option>
+                    <option value="Magic Man">Magic Man</option>
+                  </select>
+                <label class="control-label" for="selectplayer3">Player Three: </label>
+                  <select class="form-control" id="selectplayer3">
+                    <option value="none">None</option>
+                    <option value="Lady Rainicorn">Lady Rainicorn</option>
+                    <option value="Flame Princess">Flame Princess</option>
+                    <option value="Lumpy Space Princess">Lumpy Space Princess</option>
+                  </select>
+                <label class="control-label" for="selectplayer4">Player Four: </label>
+                <select class="form-control" id="selectplayer4">
+                  <option value="none">None</option>
+                  <option value="Earl of Lemongrab">Earl of Lemongrab</option>
+                  <option value="The Lich">The Lich</option>
+                </select>
+
+                </div>
+                <div class="col-xs-4">
+                  <label class="control-label" for="typeplayer1">Player One Type: </label>
+                  <select class="form-control" id="typeplayer1">
+                    <option value="0">Human</option>
+                    <option value="1">Easy Robot</option>
+                    <option value="2">Hard Robot</option>
+                  </select>
+                  <label class="control-label" for="typeplayer2">Player Two Type: </label>
+                  <select class="form-control" id="typeplayer2">
+                    <option value="0">Human</option>
+                      <option value="1">Easy Robot</option>
+                      <option value="2">Hard Robot</option>
+                    </select>
+                  <label class="control-label" for="typeplayer3">Player Three Type: </label>
+                    <select class="form-control" id="typeplayer3">
+                      <option value="0">Human</option>
+                      <option value="1">Easy Robot</option>
+                      <option value="2">Hard Robot</option>
+                    </select>
+                  <label class="control-label" for="typeplayer4">Player Four Type: </label>
+                    <select class="form-control" id="typeplayer4">
+                      <option value="0">Human</option>
+                      <option value="1">Easy Robot</option>
+                      <option value="2">Hard Robot</option>
+                    </select>
+              </div>
+
+              <div class="col-xs-4">
+                <h4>Matchpoint: </h4>
+                <input id="matchpoint" name="matchpoint" type="text" placeholder="Enter a Number" class="form-control input-md" required="">
+                <h4>Number of Dice: </h4>
+                <input id="dieinput" name="dieinput" type="text" placeholder="Enter a Number" class="form-control input-md" required="">
+                <h4>Sides Per Die: </h4>
+                <label class="radio-inline">
+                  <input type="radio" name="diesides" id="inlineRadio1" value="4"> 4
+                </label>
+                <label class="radio-inline">
+                  <input type="radio" name="diesides" id="inlineRadio2" value="6" checked="checked"> 6
+                </label>
+                <label class="radio-inline">
+                  <input type="radio" name="diesides" id="inlineRadio3" value="8"> 8
+                </label>
+                <label class="radio-inline">
+                  <input type="radio" name="diesides" id="inlineRadio4" value="12"> 12
+                </label>
+                <label class="radio-inline">
+                  <input type="radio" name="diesides" id="inlineRadio5" value="20"> 20
+                </label>
+                <div id="configSubmit">
+                  <button type="submit" class="submit_button btn btn-primary btn-lg" id="submit_button">Play Game!</button>
+                </div>
+              </div>
+            </div>
+          </form>
+        </div>
+
+      <div class="jumbotron" id="game_board">
         <div class="row">
           <div class="col-xs-6 left">
             <h2>Current Adventurer: </h2>
@@ -44,7 +144,7 @@
             <p><button id="rollButton" type="button" class="btn btn-info">Roll</button>
             <button id="holdButton"  type="button" class="btn btn-success">Hold</button></p>
           </div>
-          <div class="col-xs-6 center">
+          <div class="col-xs-6 right">
             <h2>Turn Total: <span id="totalOutput">0</span></h2>
             <h2>Current Roll: <span id="currentRoll">-</span></h2>
             <h4>Previous Roll: <span id="previousRoll">-</span></h4>
@@ -79,38 +179,21 @@
             <br>Last Roll:  <span id="p4lastroll">-</span></br>
           </div>
         </div>
-      <div>
+      </div>
+
+      <div class="jumbotron" id="winner_board">
+        <div class="row">
+          <div class="col-xs-4">
+            <img class="img-responsive" src="img/bmo.gif" alt="bmo the robot dancing" />
+          </div>
+          <div class="col-xs-4">
+            <h1>You Da Winner!!!</h1>
+          </div>
+          <div class="col-xs-4">
+            <img class="img-responsive" src="img/iceWiz.gif" alt="The Ice Wizard twerking" />
+          </div>
+        </div>
+      </div>
+    </div>
   </body>
 </html>
-
-
-<!-- div class="jumbotron" id="form_input">
-  <div class="row">
-    <div class="col-xs-3 left">
-      <h2 id="RickFlag">Player 1</h2>
-      <div id="RickScore">0</div>
-      <div id="p1Wins">
-        <img class="img-responsive" src="img/bmo.gif" alt="bmo the robot dancing" />
-        <h1>You Win!!!</h1>
-      </div>
-    </div>
-    <div class="col-xs-6 center">
-      <h1></h1>
-      <div id="totalOutput">0</div>
-      <button id="rollButton" type="button" class="btn btn-info">Roll</button>
-      <button id="holdButton"  type="button" class="btn btn-success">Hold</button>
-      <p><span id="d1Output">-</span></p>
-
-    </div>
-    <div class="col-xs-3 right">
-      <h2 id="SteveFlag">Player 2</h2>
-      <div id="SteveScore">0</div>
-      <div id="p2Wins">
-        <img class="img-responsive" src="img/iceWiz.gif" alt="The Ice Wizard twerking" />
-        <h1>You Win!!!</h1>
-      </div>
-    </div>
-
-  </div>
-
-</div> -->

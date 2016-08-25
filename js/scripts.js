@@ -1,6 +1,8 @@
 $(document).ready(function(){
 
   var game = new GameState();
+  var die = new Die(game.numSides);
+
   function GameState() {
     this.winningScore = 100;
     this.maxRobotRolls = 2;
@@ -40,9 +42,6 @@ $(document).ready(function(){
     this.lastRoll = "-";
     this.isHuman = true;
     this.robotAiHard = false;
-    this.lastRollOutput = "#" + name + "Flag";
-    this.scoreOutput = "#" + name + "Score";
-    this.winsOutput = "#" + name + "Wins";
   }
 
   //Player.prototype.rollDice = function() {
@@ -88,8 +87,11 @@ $(document).ready(function(){
       if(game.players[game.currentPlayer].score  >= game.winningScore) {
 
         ++game.players[game.currentPlayer].wins;
-        $(game.players[game.currentPlayer].flag).css({"color": "blue"});
-        $("#p2Wins").css({"display": "inline"}); // Wizard Booty Dance
+
+        $("#winner_board").slideDown(500);
+        $("#game_board").hide(500);
+        $("#player_board").hide(500);
+
         $("#rollButton").css({"display": "none"});
         $("#holdButton").css({"display": "none"});
       }
@@ -143,29 +145,16 @@ $(document).ready(function(){
   };
 
   // UI
-  var die = new Die(game.numSides);
-  addPlayer(game, "BMO");
-  addPlayer(game, "Ice King");
-  addPlayer(game, "Dave");
-  game.players[1].isHuman = true;
-  game.players[1].robotAiHard = true;
-
-  game.resetData();
-  resetBoard();
-
-
   function advanceTurn(){
     $("#holdButton").prop('disabled', true);
     if(++game.currentPlayer === game.players.length)
       game.currentPlayer = 0;
-
 
     $("#currentPlayer").text(game.players[game.currentPlayer].name);
     $("#currentScore").text(game.players[game.currentPlayer].score);
     $("#pointsToWin").text(game.winningScore - game.players[game.currentPlayer].score);
     $("#currentRoll").text("-");
     $("#previousRoll").text(game.lastRoll);
-
 
     for(var i=0; i<game.players.length; ++i) {
       if(game.currentPlayer === i)
@@ -175,10 +164,7 @@ $(document).ready(function(){
     }
   }
 
-  $("#resetButton").click(function(event){
-    game.resetData();
-    resetBoard();
-  });
+
 
   function updateScoreboard(){
 
@@ -215,33 +201,11 @@ $(document).ready(function(){
     }
   }
 
-  function resetBoard(){
-
-    //new stuff
-    $("#currentPlayer").text(game.players[game.currentPlayer].name);
-    $("#currentScore").text(game.players[game.currentPlayer].score);
-
-    updateScoreboard();
-
-
-    //old stuff
-    $(game.players[0].flag).css({"color": "green"});
-    $(game.players[1].flag).css({"color": "red"});
-    $("#RickScore").text(0);
-    $("#SteveScore").text(0);
-    $("#d1Output").text("-");
-    $("#totalOutput").text(0);
-    $("#p1Wins").css({"display": "none"});
-    $("#p2Wins").css({"display": "none"});
-    $("#holdButton").prop('disabled', true);
-    $("#rollButton").prop('disabled', false);
-  }
-
   $("#rollButton").click(function(event){
     $("#holdButton").prop('disabled', false);
-
+    //debugger;
     // Roll Dice, returns false if a one is rolled
-    //if(!game.players[game.currentPlayer].rollDice()) {
+
     if(!rollDice()) {
       advanceTurn();
       // Start robot turn if next player is one
@@ -259,5 +223,97 @@ $(document).ready(function(){
       $("#totalOutput").text(newTotal);
   }
 
+  $("#resetButton").click(function(event){
+    resetBoard();
+    $("#configure_screen").css({"display": "block"});
+    $("#game_board").css({"display": "none"});
+    $("#player_board").css({"display": "none"});
+    $("#winner_board").css({"display": "none"});
+  });
+
+  $("#game_board").css({"display": "none"});
+  $("#player_board").css({"display": "none"});
+  $("#winner_board").css({"display": "none"});
+
+  function resetBoard(){
+    game.resetData();
+
+    $("#currentPlayer").text(game.players[game.currentPlayer].name);
+    $("#currentScore").text(game.players[game.currentPlayer].score);
+    $("#totalOutput").text(0);
+    $("#holdButton").prop('disabled', true);
+    $("#rollButton").prop('disabled', false);
+
+    updateScoreboard();
+
+  }
+
+  $("#config_fields").submit(function(event){
+    var p1Name = $("select#selectplayer1").val();
+    var p2Name = $("select#selectplayer2").val();
+    var p3Name = $("select#selectplayer3").val();
+    var p4Name = $("select#selectplayer4").val();
+    var p1Type = parseInt($("select#typeplayer1").val());
+    var p2Type = parseInt($("select#typeplayer2").val());
+    var p3Type = parseInt($("select#typeplayer3").val());
+    var p4Type = parseInt($("select#typeplayer4").val());
+    var matchPoint = parseInt($("input#matchpoint").val());
+    var numDice = parseInt($("input#dieinput").val());
+    var sidesDice = parseInt($('input[name=diesides]:checked').val());
+
+    console.log(numDice + " " + matchPoint + " " + sidesDice);
+
+    addPlayer(game, p1Name);
+    addPlayer(game, p2Name);
+
+    if(p3Name === "none")
+      $("#p3board").css({"display": "none"});
+    else {
+      addPlayer(game, p3Name);
+      $("#p3board").css({"display": "inline"});
+      if(p3Type > 0){
+        game.players[2].isHuman = false;
+        if(p3Type === 2)
+          game.players[2].robotAiHard = true;
+      }
+    }
+
+    if(p4Name === "none")
+      $("#p4board").css({"display": "none"});
+    else{
+      addPlayer(game, p4Name);
+      $("#p3board").css({"display": "inline"});
+      if(p4Type > 0){
+        game.players[3].isHuman = false;
+        if(p4Type === 2)
+          game.players[3].robotAiHard = true;
+      }
+    }
+
+    if(p1Type > 0){
+      game.players[0].isHuman = false;
+      if(p1Type === 2)
+        game.players[0].robotAiHard = true;
+    }
+    if(p2Type > 0){
+      game.players[1].isHuman = false;
+      if(p2Type === 2)
+        game.players[1].robotAiHard = true;
+    }
+
+    game.winningScore = matchPoint;
+    game.numDie = numDice;
+    game.numSides = sidesDice;
+
+    updateScoreboard();
+    resetBoard();
+
+    $("#configure_screen").css({"display": "none"});
+    $("#game_board").css({"display": "block"});
+    $("#player_board").css({"display": "block"});
+    //debugger;
+
+    event.preventDefault();
+  });
 
 });
