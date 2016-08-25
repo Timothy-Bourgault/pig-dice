@@ -1,14 +1,16 @@
 $(document).ready(function(){
 
+  var game = new GameState();
   function GameState() {
     this.winningScore = 100;
     this.maxRobotRolls = 2;
-    this.maxRobotPoints = 15;
+    this.maxRobotPoints = 25;
     this.currentTotal = 0;
     this.currentPlayer = 0;
-    this.numDie = 1;
+    this.numDie = 2;
+    this.numSides = 6;
     this.players = [];
-    //this.compPlayers =[];
+
   }
 
   GameState.prototype.resetData = function() {
@@ -26,6 +28,7 @@ $(document).ready(function(){
 
   Die.prototype.roll = function() {
     this.currentValue = Math.floor(Math.random() * this.numSides) + 1;
+    console.log(game.currentPlayer + " Die Rolled: " + this.currentValue);
     return(this.currentValue);
   }
 
@@ -35,11 +38,15 @@ $(document).ready(function(){
     this.lastRoll =[];
     this.wins = 0;
     this.isHuman = true;
+    this.robotAiHard = false;
     this.flag = "#" + name + "Flag";
     this.scoreOutput = "#" + name + "Score";
+    this.winsOutput = "#" + name + "Wins";
   }
 
-  Player.prototype.rollDice = function() {
+  //Player.prototype.rollDice = function() {
+  function rollDice(){
+    //debugger;
     var roll = [];
     for(var i=0; i<game.numDie; ++i){
       roll.push(die.roll());
@@ -67,13 +74,13 @@ $(document).ready(function(){
 
       //update the players score
       game.players[game.currentPlayer].score += game.currentTotal;
+
       $(game.players[game.currentPlayer].scoreOutput).text(game.players[game.currentPlayer].score);
 
+      // Win Logic
       if(game.players[game.currentPlayer].score  >= game.winningScore) {
         $(game.players[game.currentPlayer].flag).css({"color": "blue"});
-
-        //$("#p2flag").css({"color": "blue"});
-        $("#p2Wins").css({"display": "inline"});
+        $("#p2Wins").css({"display": "inline"}); // Wizard Booty Dance
         $("#rollButton").css({"display": "none"});
         $("#holdButton").css({"display": "none"});
       }
@@ -81,7 +88,7 @@ $(document).ready(function(){
         game.currentTotal = 0;
         updateTotal(game.currentTotal);
         $("#rollButton").prop('disabled', false);
-        toggleTurn();
+        advanceTurn();
         if(game.players[game.currentPlayer].isHuman === false) {
           robotTurn();
         }
@@ -97,59 +104,49 @@ $(document).ready(function(){
     $("#holdButton").prop('disabled', true);
     $("#rollButton").prop('disabled', true);
 
-    // Roll Twice
     var i=0;
-    var temp;
-    do {
-      temp = game.players[game.currentPlayer].rollDice();
-      ++i;
-    } while(i<game.maxRobotRolls && temp)
+    var cleanRoll = false;
+
+    // Hard Robot AI
+    if(game.players[game.currentPlayer].robotAiHard) {
+      do {
+        cleanRoll = rollDice();
+        ++i;
+      } while(i<(game.maxRobotRolls +1) && cleanRoll && game.currentTotal <= game.maxRobotPoints)
+    }
+
+    // Easy Robot AI
+    else {
+      do {
+        cleanRoll = rollDice();
+        ++i;
+      } while(i<game.maxRobotRolls && cleanRoll)
+    }
 
     $("#rollButton").prop('disabled', false);
 
     // Hold if One wasn't rolled else toggleTurn
-    if(temp) {
+    if(cleanRoll) {
       game.players[game.currentPlayer].hold();
     } else {
-      toggleTurn();
+      advanceTurn();
     }
-
-    //while(advRobotRoll());
-
-
   };
 
-
-  function advRobotRoll(){
-
-     if(game.currentTotal <= 15 && !game.players[game.currentPlayer].isHuman) {
-
-
-      if(roll.indexOf(1) > -1)   // Player rolled a One
-         return true;
-      else
-        return false;
-     }
-     else {
-        game.players[game.currentPlayer].hold();
-        return false;
-     }
-   }
-
   // UI
-  var game = new GameState();
-  var die = new Die(6);
+  var die = new Die(game.numSides);
   addPlayer(game, "Rick");
   addPlayer(game, "Steve");
-  game.players[1].isHuman = true;
+  game.players[1].isHuman = false;
+  game.players[1].robotAiHard = true;
 
   game.resetData();
   resetBoard();
 
 
-  function toggleTurn(){
+  function advanceTurn(){
     $("#holdButton").prop('disabled', true);
-    if(++game.currentPlayer >= game.players.length)
+    if(++game.currentPlayer === game.players.length)
       game.currentPlayer = 0;
 
     for(var i=0; i<game.players.length; ++i) {
@@ -182,9 +179,9 @@ $(document).ready(function(){
     $("#holdButton").prop('disabled', false);
 
     // Roll Dice, returns false if a one is rolled
-    if(!game.players[game.currentPlayer].rollDice()) {
-      toggleTurn();
-
+    //if(!game.players[game.currentPlayer].rollDice()) {
+    if(!rollDice()) {
+      advanceTurn();
       // Start robot turn if next player is one
       if(!game.players[game.currentPlayer].isHuman)
         robotTurn();
